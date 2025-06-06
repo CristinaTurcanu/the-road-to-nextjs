@@ -5,11 +5,11 @@ import TicketItem from "@/features/ticket/components/ticket-item";
 import { ticketsPath } from "@/paths";
 import Link from "next/link";
 
-type TicketsPageProps = {
+type TicketPageProps = {
   params: { ticketId: string };
 };
 
-const TicketsPage = ({params}: TicketsPageProps) => {
+const TicketsPage = ({params}: TicketPageProps) => {
   const ticket = initialTickets.find(t => t.id.toString() === params.ticketId);
 
   if (!ticket) {
