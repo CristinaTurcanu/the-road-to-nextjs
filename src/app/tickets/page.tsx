@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import {initialTickets} from '@/data';
 import Heading from '@/components/heading';
 import TicketItem from '@/features/ticket/components/ticket-item';
 import { Ticket } from '@/features/ticket/types';
@@ -15,7 +14,7 @@ const TicketsPage = () => {
       const result = await getTickets();
       setTickets(result);
     }
-    
+
     fetchTickets();
   }, []);
 
