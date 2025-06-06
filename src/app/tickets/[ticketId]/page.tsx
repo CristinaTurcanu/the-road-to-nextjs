@@ -1,10 +1,11 @@
+import Link from "next/link";
 import React, { use } from "react";
+
 import Placeholder from "@/components/placeholder";
 import { Button } from "@/components/ui/button";
 import { initialTickets } from "@/data";
-import { ticketsPath } from "@/paths";
 import TicketItem from "@/features/ticket/components/ticket-item";
-import Link from "next/link";
+import { ticketsPath } from "@/paths";
 
 const TicketsPage = ({ params }: { params: Promise<{ ticketId: string }> }) => {
   const { ticketId } = use(params);
