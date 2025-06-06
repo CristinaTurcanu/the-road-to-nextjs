@@ -1,16 +1,20 @@
+import React from "react";
 import Placeholder from "@/components/placeholder";
 import { Button } from "@/components/ui/button";
 import { initialTickets } from "@/data";
-import TicketItem from "@/features/ticket/components/ticket-item";
 import { ticketsPath } from "@/paths";
+import TicketItem from "@/features/ticket/components/ticket-item";
 import Link from "next/link";
 
-type TicketPageProps = {
-  params: { ticketId: string };
-};
+interface TicketPageProps {
+  params: {
+    ticketId: string;
+  };
+}
 
 const TicketsPage = ({params}: TicketPageProps) => {
-  const ticket = initialTickets.find(t => t.id.toString() === params.ticketId);
+  const { ticketId } = params;
+  const ticket = initialTickets.find(t => t.id.toString() === ticketId);
 
   if (!ticket) {
     return (
