@@ -1,4 +1,9 @@
+import Placeholder from "@/components/placeholder";
+import { Button } from "@/components/ui/button";
 import { initialTickets } from "@/data";
+import TicketItem from "@/features/ticket/components/ticket-item";
+import { ticketsPath } from "@/paths";
+import Link from "next/link";
 
 type TicketsPageProps = {
   params: { ticketId: string };
@@ -6,14 +11,20 @@ type TicketsPageProps = {
 
 const TicketsPage = ({params}: TicketsPageProps) => {
   const ticket = initialTickets.find(t => t.id.toString() === params.ticketId);
+
   if (!ticket) {
-    return <div>Ticket not found</div>;
-  }
+    return (
+    <div className="flex flex-1">
+      <Placeholder
+        label="Ticket not found"
+        button={<Button asChild variant={"outline"}><Link href={ticketsPath()}>Go to tickets</Link></Button>}
+      />
+    </div>
+  )}
 
   return (
-    <div>
-      <h2 className="text-lg">{ticket.title}</h2>
-      <p className="text-sm">{ticket.content}</p>
+    <div className="flex justify-center animate-fade-in-from-top">
+      <TicketItem ticket={ticket} isDetail />
     </div>
   );
 };

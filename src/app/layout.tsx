@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import { homePath, ticketsPath } from "@/paths";
+import Header from "@/components/header";
+import ThemeProvider from "@/components/theme/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,21 +26,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <nav className="supports-backdrop-blur:bg-background w-full border-b bg-background/95 backdrop-blur flex justify-between items-center bg-gray-100 p-4 shadow-md fixed top-0 left-0 right-0 z-50">
-          <div>
-            <Link href={homePath()} className="text-lg font-bold">Home</Link>
-          </div>
-          <div>
-            <Link href={ticketsPath()} className="text-sm underline">Tickets</Link>
-          </div>
-        </nav>
-        <main className="min-h-screen flex-1 overflow-y-auto overflow-x-hidden bg-secondary/20 flex flex-col py-24 px-8">
-          {children}</main>
-        
+    <html suppressHydrationWarning lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider>
+          <Header />
+          <main className="min-h-screen flex-1 overflow-y-auto overflow-x-hidden bg-secondary/20 flex flex-col py-24 px-8">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );
