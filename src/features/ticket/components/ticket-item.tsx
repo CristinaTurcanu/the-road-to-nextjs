@@ -53,5 +53,5 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
         </div>
     )
 };
-export default TicketItem;
+export {TicketItem};
  

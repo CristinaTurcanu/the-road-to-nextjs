@@ -25,4 +25,4 @@ const Placeholder = ({
   );
 };
 
-export default Placeholder;
+export {Placeholder};
