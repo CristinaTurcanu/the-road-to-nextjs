@@ -2,14 +2,14 @@ import { notFound } from "next/navigation";
 
 import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
+import { use } from "react";
+import { initialTickets } from "@/data";
 
-type TicketPageProps = {
-  params: { ticketId: string };
-};
-
-const TicketsPage = async ({ params }: TicketPageProps) => {
-  const { ticketId } = await params;
-  const ticket = await getTicket(ticketId); 
+const TicketsPage = async ({ params }: { params: Promise<{ ticketId: string }> }) => {
+  // Use the params promise to get the ticketId
+  // This is necessary because Next.js passes params as a promise in dynamic routes
+  const ticketId = await params.then(p => p.ticketId);
+  const ticket = await getTicket(ticketId);
 
   if (!ticket) {
       notFound();
