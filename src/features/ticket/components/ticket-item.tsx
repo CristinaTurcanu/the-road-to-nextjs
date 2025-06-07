@@ -1,3 +1,4 @@
+import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
 import { LucideSquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
@@ -13,7 +14,6 @@ import {
 import { ticketPath } from '@/paths';
 
 import { TICKETS_ICONS } from '../constants';
-import { Ticket } from '../types';
 
 type TicketItemProps = {
     ticket: Ticket;
