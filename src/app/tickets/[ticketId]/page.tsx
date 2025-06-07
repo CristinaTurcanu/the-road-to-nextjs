@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 
 import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
-import { use } from "react";
-import { initialTickets } from "@/data";
 
 const TicketsPage = async ({ params }: { params: Promise<{ ticketId: string }> }) => {
   // Use the params promise to get the ticketId
