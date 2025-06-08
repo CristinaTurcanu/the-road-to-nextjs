@@ -1,17 +1,17 @@
 import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
-import { LucideSquareArrowOutUpRight, LucideTrash } from 'lucide-react';
+import { LucidePencil, LucideSquareArrowOutUpRight, LucideTrash } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card"
-import { ticketPath } from '@/paths';
+import { ticketEditPath, ticketPath } from '@/paths';
 
 import { deleteTicket } from '../actions/delete-ticket';
 import { TICKETS_ICONS } from '../constants';
@@ -31,11 +31,21 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
     );
 
     const deleteButton = (
-      <form action={deleteTicket.bind(null, ticket.id)}>
-        <Button variant={"outline"} size={"icon"} >
-            <LucideTrash className='h-4 w-4' />
-        </Button>
-      </form>
+        <form action={deleteTicket.bind(null, ticket.id)}>
+            <Button variant={"outline"} size={"icon"} >
+                <LucideTrash className='h-4 w-4' />
+            </Button>
+        </form>
+    );
+
+    const editButton = (
+        <form action={''}>
+            <Button variant={"outline"} size={"icon"} >
+                <Link prefetch href={ticketEditPath(ticket.id)} className="text-blue-500 underline">
+                    <LucidePencil className='h-4 w-4' />
+                </Link>
+            </Button>
+        </form>
     );
 
     return (
@@ -44,22 +54,32 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
             'max-w-[420px]': !isDetail,
         })}>
             <Card key={ticket.id} className="w-full">
-              <CardHeader>
-                <CardTitle className='flex gap-x-2'>
-                  <span>{TICKETS_ICONS[ticket.status]}</span>
-                  <span className="truncate">{ticket.title}</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <span className={clsx('whitespace-break-spaces', {
-                    "line-clamp-3": !isDetail,
-                })}>
-                  {ticket.content}
-                </span>
-              </CardContent>
+                <CardHeader>
+                    <CardTitle className='flex gap-x-2'>
+                        <span>{TICKETS_ICONS[ticket.status]}</span>
+                        <span className="truncate">{ticket.title}</span>
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <span className={clsx('whitespace-break-spaces', {
+                        "line-clamp-3": !isDetail,
+                    })}>
+                        {ticket.content}
+                    </span>
+                </CardContent>
             </Card>
             <div className='flex flex-col gap-y-1'>
-              {isDetail ? deleteButton : viewButton}
+                {isDetail ? (
+                    <>
+                        {editButton}
+                        {deleteButton}
+                    </>) : (
+                    <>
+                        {viewButton}
+                        {editButton}
+                    </>
+                )
+                }
             </div>
         </div>
     )
