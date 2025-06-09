@@ -4,14 +4,8 @@ import { CardForm } from "@/components/card-form";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 
-type TicketEditPageProps = {
-    params: {  
-        ticketId: string;
-    };
-};
-
-const TicketEditPage = async ({params}: TicketEditPageProps) => {
-    const ticketId = await params.then(p => p.ticketId);
+const TicketEditPage = async ({params}: { params: Promise<{ ticketId: string }> }) => {
+    const ticketId = (await params).ticketId;
     const ticket = await getTicket(ticketId);
     
     if (!ticket) {
