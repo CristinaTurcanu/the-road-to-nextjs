@@ -13,15 +13,27 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
+export type ImpertiveHandleFromDatePicker = {
+    reset: () => void;
+}
+
 type DatePickerProps = {
     id: string;
     name: string;
     defaultValue?: Date | string | undefined;
+    imperativeHandleRef?: React.RefObject<ImpertiveHandleFromDatePicker>;
 }
 
-export const DatePicker = ({id, name, defaultValue }: DatePickerProps) => {
+export const DatePicker = ({id, name, defaultValue, imperativeHandleRef }: DatePickerProps) => {
     const [date, setDate] = useState<Date | undefined>(defaultValue ? new Date(defaultValue) : new Date());
     const [open, setOpen] = useState(false);
+
+    React.useImperativeHandle(imperativeHandleRef, () => ({
+        reset: () => {
+            setDate(new Date());
+            setOpen(false);
+        }
+    }), []);
 
     const formattedDateString = date ? format(date, "yyyy-mm-dd") : "";
 
