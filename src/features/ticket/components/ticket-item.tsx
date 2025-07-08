@@ -1,6 +1,6 @@
 import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
-import { LucideMoreVertical, LucidePencil, LucideSquareArrowOutUpRight, LucideTrash } from 'lucide-react';
+import { LucideMoreVertical, LucidePencil, LucideSquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
@@ -15,7 +15,6 @@ import {
 import { ticketEditPath, ticketPath } from '@/paths';
 import { toCurrencyFromCents } from '@/utils/currency';
 
-import { deleteTicket } from '../actions/delete-ticket';
 import { TICKETS_ICONS } from '../constants';
 import { TicketMoreMenu } from './TicketMoreMenu';
 
@@ -33,13 +32,14 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
         </Button>
     );
 
-    const deleteButton = (
-        <form action={deleteTicket.bind(null, ticket.id)}>
-            <Button variant={"outline"} size={"icon"} >
-                <LucideTrash className='h-4 w-4' />
-            </Button>
-        </form>
-    );
+    // const deleteButton = useConfirmDialog({
+    //     action: deleteTicket.bind(null, ticket.id),
+    //     trigger: (
+    //         <Button variant={"outline"} size={"icon"} >
+    //             <LucideTrash className='h-4 w-4' />
+    //         </Button>
+    //     )
+    // });
 
     const editButton = (
         <form action={''}>
@@ -88,7 +88,6 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
                 {isDetail ? (
                     <>
                         {editButton}
-                        {deleteButton}
                         {moreMenu}
                     </>) : (
                     <>
