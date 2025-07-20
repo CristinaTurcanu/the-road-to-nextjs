@@ -1,4 +1,4 @@
-import { Ticket } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import clsx from 'clsx';
 import { LucideMoreVertical, LucidePencil, LucideSquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
@@ -12,6 +12,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { getAuth } from '@/features/auth/queries/get-auth';
+import { isOwner } from '@/features/auth/utils/is-owner';
 import { ticketEditPath, ticketPath } from '@/paths';
 import { toCurrencyFromCents } from '@/utils/currency';
 
@@ -19,11 +21,22 @@ import { TICKETS_ICONS } from '../constants';
 import { TicketMoreMenu } from './TicketMoreMenu';
 
 type TicketItemProps = {
-    ticket: Ticket;
+    ticket: Prisma.TicketGetPayload<{
+        include: {
+            user: {
+                select: {
+                    username: true
+                }
+            }
+        }
+    }>;
     isDetail?: boolean;
 };
 
-const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
+const TicketItem = async ({ticket, isDetail}: TicketItemProps) => {
+    const { user } = await getAuth();
+    const isTicketOwner = isOwner(user, ticket);
+    
     const viewButton = (
         <Button variant={"outline"} size={"icon"} asChild>
             <Link prefetch href={ticketPath(ticket.id)} className="text-blue-500 underline">
@@ -41,7 +54,7 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
     //     )
     // });
 
-    const editButton = (
+    const editButton = isTicketOwner ? (
         <form action={''}>
             <Button variant={"outline"} size={"icon"} >
                 <Link prefetch href={ticketEditPath(ticket.id)} className="text-blue-500 underline">
@@ -49,16 +62,16 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
                 </Link>
             </Button>
         </form>
-    );
+    ) : null;
 
-    const moreMenu = <TicketMoreMenu 
+    const moreMenu = isTicketOwner ? (<TicketMoreMenu 
         ticket={ticket} 
         trigger={
             <Button className="p-2 rounded hover:bg-gray-100">
                 <LucideMoreVertical className="h-4 w-4" />
             </Button>
         }
-    />;
+    />) : null;
 
     return (
         <div className={clsx('w-full flex gap-x-1', {
@@ -80,7 +93,7 @@ const TicketItem = ({ticket, isDetail}: TicketItemProps) => {
                     </span>
                 </CardContent>
                 <CardFooter className='flex justify-between'>
-                    <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+                    <p className="text-sm text-muted-foreground">{ticket.deadline} by {ticket.user.username}</p>
                     <p className="text-sm text-muted-foreground">{toCurrencyFromCents(ticket.bounty)}</p>
                 </CardFooter>
             </Card>

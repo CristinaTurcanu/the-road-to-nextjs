@@ -23,6 +23,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 ##  Database
  - Run prisma studio": npx prisma studio
  - Migrate after change in schema: npx prisma db push
+ - Seed: npm run prisma-seed
 
 
 ## Learn More

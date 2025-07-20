@@ -7,7 +7,7 @@ import ThemeSwitcher from "@/components/theme/theme-switcher";
 import { Button } from "@/components/ui/button"
 import { signOut } from "@/features/auth/actions/sign-out";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
+import { homePath, signInPath, signUpPath } from "@/paths";
 
 import { SubmitButton } from "./form/submit-btn";
 
@@ -15,18 +15,13 @@ const Header = () => {
     const { user, loaded } = useAuth();
 
     if (!loaded) {
-        return null; // or a loading spinner
+        return null;
     }
 
     const navItems = user ? (
-        <>
-            <Button asChild variant="default">
-                <Link href={ticketsPath()}>Tickets</Link>
-            </Button>
-            <form action={signOut}>
-                <SubmitButton icon={<LucideLogOut />}/>
-            </form>
-        </>
+        <form action={signOut}>
+            <SubmitButton icon={<LucideLogOut />}/>
+        </form>
     ) : (
         <>
             <Button asChild variant="outline">
