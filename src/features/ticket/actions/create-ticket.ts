@@ -24,6 +24,10 @@ export const createTicket = async (formData: FormData) => {
             content: data.content as string,
             deadline: data.deadline as string,
             bounty: toCent(Number(data.bounty ?? 0)),
+            user: {
+                // Replace 'userId' with the actual user id value
+                connect: { id: formData.get("userId") as string }
+            },
         },
     });
     revalidatePath(ticketsPath());
