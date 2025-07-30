@@ -10,7 +10,7 @@ export default async function AuthenticatedLayout({
 }>) {
     const { user } = await getAuth();
 
-    if(!user) {
+    if (!user) {
         redirect(signInPath());
     }
 

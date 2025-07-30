@@ -10,6 +10,7 @@ import { homePath, signInPath, signUpPath } from "@/paths";
 
 import { AccountDropdown } from "./account-dropdown";
 
+
 const Header = () => {
     const { user, loaded } = useAuth();
 
