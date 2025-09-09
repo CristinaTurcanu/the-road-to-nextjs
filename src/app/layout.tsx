@@ -2,6 +2,7 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NuqsAdapter } from 'nuqs/adapters/next';
 
 import { Sidebar } from "@/app/_navigation/sidebar/components/sidebar";
 import ThemeProvider from "@/components/theme/theme-provider";
@@ -44,7 +45,7 @@ export default function RootLayout({
                         bg-secondary/20 
                         flex flex-col 
                         py-24 px-8">
-                            {children}
+                            <NuqsAdapter>{children}</NuqsAdapter>
                         </main>
                     </div>
                     <Toaster expand />
