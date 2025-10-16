@@ -12,7 +12,13 @@ const tickets = [
     { title: 'Ticket 2', content: 'content for ticket 2', status: 'CLOSED' as TicketStatus, deadline: "2024-10-10", bounty: 200 },
     { title: 'Ticket 3', content: 'content for ticket 3', status: 'OPEN' as TicketStatus, deadline: "2024-10-10", bounty: 150 },
     { title: 'Ticket 4', content: 'content for ticket 4', status: 'IN_PROGRESS' as TicketStatus, deadline: "2024-10-10", bounty: 250 },
-]
+];
+
+const comments = [
+    { content: 'This is a comment on ticket 1', ticketId: 1 },
+    { content: 'This is another comment on ticket 1', ticketId: 1 },
+    { content: 'This is a comment on ticket 2', ticketId: 2 },
+];
 
 const seed = async () => {
     console.log('DB Seed: Started');
@@ -20,6 +26,7 @@ const seed = async () => {
     const passwordHash = await hash('password123');
 
     // Clear existing data  
+    await prisma.comment.deleteMany({});
     await prisma.ticket.deleteMany({});
     await prisma.user.deleteMany({});
 
@@ -33,10 +40,19 @@ const seed = async () => {
     });
 
     // Create new tickets
-    await prisma.ticket.createMany({
+    const dbTickets = await prisma.ticket.createManyAndReturn({
         data: tickets.map((ticket) => ({
             ...ticket,
             userId: dbUsers[0].id // Assigning the first user as the owner of all tickets
+        })),
+    });
+
+    // Create new commments
+    await prisma.comment.createMany({
+        data: comments.map((comment) => ({
+            ...comment,
+            userId: dbUsers[0].id, // Assigning the first user as the owner of comments
+            ticketId: dbTickets[0].id // Ensure ticketId matches the created tickets   
         })),
     });
 
