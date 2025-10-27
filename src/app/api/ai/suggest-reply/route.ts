@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
@@ -10,7 +11,7 @@ export async function POST(req: Request) {
             return Response.json({ error: "Missing description" }, { status: 400 });
         }
 
-        const messages = [
+        const messages: any = [
             {
                 name: '1',
                 role: "system",
