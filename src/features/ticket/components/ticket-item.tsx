@@ -33,10 +33,13 @@ type TicketItemProps = {
         }
     }>;
     isDetail?: boolean;
-    comments?: CommentWithMetadata[];
+    paginatedComments?: {
+        list: CommentWithMetadata[],
+        metadata: {count: number, hasNextPage: boolean}
+    };
 };
 
-const TicketItem = async ({ticket, isDetail, comments}: TicketItemProps) => {
+const TicketItem = async ({ticket, isDetail, paginatedComments}: TicketItemProps) => {
     const { user } = await getAuth();
     const isTicketOwner = isOwner(user, ticket);
     
@@ -116,7 +119,7 @@ const TicketItem = async ({ticket, isDetail, comments}: TicketItemProps) => {
                 </div>
             </div>
             {isDetail && 
-                <Comments ticketId={ticket.id} comments={comments}/>
+                <Comments ticketId={ticket.id} ticket={ticket} paginatedComments={paginatedComments}/>
             }
         </div>
     )

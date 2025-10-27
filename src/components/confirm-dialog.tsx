@@ -11,13 +11,15 @@ type UseConfirmDialogProps = {
     description?: string;
     action: () => Promise<ActionState>;    
     trigger: React.ReactElement<{ onClick?: () => void }>;
+    onSuccess?: () => void
 };
 
 const useConfirmDialog = ({ 
     title="Are you absolutely sure?", 
     description='This action cannot be undone. This will permanently delete your ticket and remove your data from our servers.', 
     action, 
-    trigger 
+    trigger,
+    onSuccess
 }: UseConfirmDialogProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -27,6 +29,7 @@ const useConfirmDialog = ({
     
     const handleSuccess = () => {
         setIsOpen(false);
+        onSuccess?.();
     };
 
     const [actionState, formAction] = useActionState(action, EMPTY_ACTION_STATE)

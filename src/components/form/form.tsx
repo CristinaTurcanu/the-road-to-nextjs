@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { toast } from 'sonner';
 
@@ -8,7 +9,7 @@ type FormProps = {
     action: (formData: FormData) => void;
     actionState: ActionState;
     children: React.ReactNode;
-    onSuccess?: (actionState: ActionState) => void;
+    onSuccess?: (actionState: ActionState<any>) => void;
     onError?: (actionState: ActionState) => void;
 };
 
