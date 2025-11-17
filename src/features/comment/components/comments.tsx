@@ -4,6 +4,7 @@
 import { Ticket, User } from "@prisma/client";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect,useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 import AiSuggestedReply from "@/components/ai-suggested-reply";
 import { CardForm } from "@/components/card-form";
@@ -27,6 +28,7 @@ type CommentsProps = {
 const Comments = ({ticketId, paginatedComments, ticket }: CommentsProps) => {
     const [user, setUser] = useState<User | null>(null);
     const queryKey = ['comments', ticketId];
+    const {ref, inView} = useInView();
 
     const {data, fetchNextPage, hasNextPage, isFetchNextPageError} = useInfiniteQuery({
         queryKey,
@@ -56,17 +58,11 @@ const Comments = ({ticketId, paginatedComments, ticket }: CommentsProps) => {
         };
     }, []);
 
-    const handleMore = async () => {
-        // without react query
-        // const morePaginatedComments = await getComments(ticketId, metadata?.cursor);
-        // const moreComments = morePaginatedComments.list;
-
-        // setComments([...(comments || []), ...moreComments]);
-        // setMetadata(morePaginatedComments.metadata)
-
-        // with react query
-        fetchNextPage()
-    }
+    useEffect(() => {
+        if(inView && hasNextPage && !isFetchNextPageError) {
+            fetchNextPage();
+        }
+    }, [fetchNextPage, inView, hasNextPage, isFetchNextPageError]);
 
     const queryClient = useQueryClient();
 
@@ -94,14 +90,15 @@ const Comments = ({ticketId, paginatedComments, ticket }: CommentsProps) => {
                 previousComments={paginatedComments?.list?.map(c => c.content).join("\n")}
                 onInsertSuggestion={() => {}}
             />
-            {hasNextPage && <div className="flex flex-col justify-center ml-8">
+            {/* {hasNextPage && <div className="flex flex-col justify-center ml-8">
                 <Button 
                     variant={'ghost'} 
                     onClick={handleMore}
                     disabled={isFetchNextPageError}
                 >More
                 </Button>
-            </div>}
+            </div>} */}
+            <div ref={ref}>{!hasNextPage && <p className="text-xs text-right italic">No more comments</p>}</div>
         </>
     )
 };
