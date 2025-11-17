@@ -2,6 +2,8 @@
 
 import { SelectValue } from "@radix-ui/react-select";
 
+import { PaginatedData } from "@/types/pagination";
+
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 
@@ -12,10 +14,7 @@ type PageAndSize = {
 
 type PaginationProps = {
     pagination: PageAndSize;
-    paginatedMetdata: {
-        count: number;
-        hasNextPage: boolean;
-    };
+    paginatedMetdata: PaginatedData<unknown>["metadata"];
     onPagination: (pagination: PageAndSize) => void;
 };
 const Pagination = ({pagination, paginatedMetdata: {count, hasNextPage}, onPagination}: PaginationProps)  => {    

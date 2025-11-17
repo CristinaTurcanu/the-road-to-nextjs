@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client';
 import clsx from 'clsx';
 import { LucideMoreVertical, LucidePencil, LucideSquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
@@ -20,18 +19,11 @@ import { ticketEditPath, ticketPath } from '@/paths';
 import { toCurrencyFromCents } from '@/utils/currency';
 
 import { TICKETS_ICONS } from '../constants';
+import { TicketWithMetadata } from '../types';
 import { TicketMoreMenu } from './TicketMoreMenu';
 
 type TicketItemProps = {
-    ticket: Prisma.TicketGetPayload<{
-        include: {
-            user: {
-                select: {
-                    username: true
-                }
-            }
-        }
-    }>;
+    ticket: TicketWithMetadata;
     isDetail?: boolean;
     paginatedComments?: {
         list: CommentWithMetadata[],

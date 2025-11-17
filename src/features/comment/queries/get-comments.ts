@@ -2,29 +2,40 @@
  
 import prisma from "@/lib/prisma";
 
-export const getComments = async (ticketId: string, offset?: number) => {
-    const skip = offset ?? 0;
+export const getComments = async (ticketId: string, cursor?: string) => {
+    // const skip = offset ?? 0;
     const take = 2;
-    const where = {ticketId}
+    const where = {
+        ticketId,
+        id: { lt: cursor }
+        // createdAt: {
+        //     lt: cursor ? new Date(cursor) : undefined
+        // }
+    }
 
-    const [comments, count] = await prisma.$transaction([
+    // eslint-disable-next-line prefer-const
+    let [comments, count] = await prisma.$transaction([
         prisma.comment.findMany({
             where,
-            skip,
-            take,
+            take: take + 1 ,
             include: { user: { select: { username: true } } },
-            orderBy: { createdAt: 'desc' }
+            orderBy: [{ createdAt: 'desc' }, {id: "desc"}]
         }),
         prisma.comment.count({
             where
         })
     ])
 
+    const hasNextPage = comments.length > take;
+    comments = hasNextPage ? comments.slice(0, -1) : comments;
+
     return {
         list: comments,
         metadata: {
             count,
-            hasNextPage: count > skip + take
+            hasNextPage,
+            cursor: comments.at(-1)?.id
+            // hasNextPage: count > skip + take
         }
     }
 };
